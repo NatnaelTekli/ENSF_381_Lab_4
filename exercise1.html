@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id="textInput" placeholder="Type something here..."/> 
+  <label id="textLabel"></label> 
+  <button id="redButton" style="color:red;">Red</button> 
+  <button id="blueButton" style="color:blue;">Blue</button> 
+  <button id="greenButton" style="color:green;">Green</button> 
+  <button id="orangeButton" style="color:orange;">Orange</button> 
+  <button id="purpleButton" style="color:purple;">Purple</button>
+</body>
+<script type="text/javascript"> 
+  const textInput = document.getElementById('textInput');
+  const textLabel = document.getElementById('textLabel');
+
+  // when Enter is pressed in the textbox, update label and clear the input
+  textInput.addEventListener('keydown', function(event) {
+    if (event.key === "Enter") {
+      textLabel.textContent = textInput.value;
+      textInput.value = ""; // clear textbox
+    }
+  });
+
+  // button elements
+  const redButton = document.getElementById('redButton');
+  const blueButton = document.getElementById('blueButton');
+  const greenButton = document.getElementById('greenButton');
+  const orangeButton = document.getElementById('orangeButton');
+  const purpleButton = document.getElementById('purpleButton');
+
+  // change label color on button clicks
+  redButton.addEventListener('click', () => { textLabel.style.color = 'red'; });
+  blueButton.addEventListener('click', () => { textLabel.style.color = 'blue'; });
+  greenButton.addEventListener('click', () => { textLabel.style.color = 'green'; });
+  orangeButton.addEventListener('click', () => { textLabel.style.color = 'orange'; });
+  purpleButton.addEventListener('click', () => { textLabel.style.color = 'purple'; });
+</script>
+</html>
