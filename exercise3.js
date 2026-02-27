@@ -12,9 +12,8 @@ const sortByIdBtn = document.getElementById('sortByIdBtn');
 async function retrieveData() {
   try {
     const response = await fetch(API_URL);
-    if (!response.ok) throw new Error("Failed to fetch users");
-
     users = await response.json();
+    
     console.log(users);
     render(users);
 
@@ -28,15 +27,18 @@ function render(userArray) {
     userGrid.innerHTML = "No users loaded.";
     return;
   }
+  userGrid.innerHTML = "";
 
-  userGrid.innerHTML = userArray.map(user => `
-    <article class="user-card"> 
-      <h3>${user.first_name ?? ""}</h3> 
-      <p>first_name: ${user.first_name ?? ""}</p> 
-      <p>user_group: ${user.user_group ?? ""}</p> 
-      <p>id: ${user.id ?? ""}</p> 
-    </article>
-  `).join("");
+  userArray.forEach(user => {
+    userGrid.innerHTML += `
+      <article class="user-card"> 
+        <h3>${user.first_name}</h3> 
+        <p>first_name: ${user.first_name}</p> 
+        <p>user_group: ${user.user_group}</p> 
+        <p>id: ${user.id}</p> 
+      </article>
+    `;
+  });
 }
 
 viewToggleBtn.addEventListener('click', () => {
@@ -65,31 +67,24 @@ sortByIdBtn.addEventListener('click', () => {
 
 deleteBtn.addEventListener('click', async () => {
   const id = deleteIdInput.value.trim();
+  if (!id) return console.error("Invalid ID");
 
-  if (!id) {
-    console.error("Invalid ID");
-    return;
-  }
+  let found = false;
+  users.forEach((user, i) => {
+    if (user.id === id) {
+      users.splice(i, 1);
+      found = true;
+    }
+  });
 
-  const userExists = users.find(user => user.id === id);
-
-  if (!userExists) {
-    console.error("No matching user found");
-    return;
-  }
+  if (!found) return console.error("No matching user found");
 
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'DELETE'
-    });
-
-    if (!response.ok) throw new Error("Delete failed");
-
-    users = users.filter(user => user.id !== id);
+    const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    if (!response.ok) console.error("Failed to delete user");
     render(users);
-
-  } catch (error) {
-    console.error("Error deleting user:", error);
+  } catch (err) {
+    console.error("Error deleting user:", err);
   }
 });
 
